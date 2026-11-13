@@ -1,0 +1,60 @@
+{
+  "name": "pi-charter",
+  "version": "0.1.0",
+  "description": "Spec-driven, code-enforced multi-agent delivery pipeline for the Pi coding agent: write a charter, approve it, and let gated implementer, auditor and refiner agents deliver it.",
+  "keywords": [
+    "pi",
+    "pi-package",
+    "pi-coding-agent",
+    "spec-driven-development",
+    "sdd",
+    "subagents",
+    "multi-agent",
+    "workflow",
+    "verification"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "extensions/",
+    "src/",
+    "prompts/",
+    "templates/",
+    "schemas/",
+    "docs/",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test --test-concurrency=4 \"test/**/*.test.ts\"",
+    "test:unit": "node --test \"test/unit/**/*.test.ts\"",
+    "test:e2e": "node --test \"test/e2e/**/*.test.ts\"",
+    "test:coverage": "node --test --experimental-test-coverage --test-coverage-include=\"src/**\" \"test/unit/*.test.ts\" \"test/e2e/*.test.ts\"",
+    "bench": "node bench/bench.ts",
+    "check": "npm run typecheck && npm test",
+    "test:cli": "node --test \"test/cli/*.test.ts\""
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*",
+    "typebox": "*"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-agent-core": "1.5.2",
+    "@earendil-works/pi-ai": "1.5.2",
+    "@earendil-works/pi-coding-agent": "1.5.2",
+    "@earendil-works/pi-tui": "1.5.2",
+    "@types/node": "^22.19.0",
+    "typebox": "1.3.27",
+    "typescript": "^7.0.2"
+  },
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "pi": {
+    "extensions": [
+      "./extensions/charter.ts"
+    ]
+  }
+}

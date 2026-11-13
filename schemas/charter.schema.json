@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://unpkg.com/pi-charter/schemas/charter.schema.json",
+  "title": "pi-charter configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version"],
+  "definitions": {
+    "role": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": { "type": "boolean", "description": "Whether this phase runs." },
+        "model": { "type": ["string", "null"], "pattern": "^[^/\\s]+/\\S+$|^inherit$", "description": "provider/model-id as Pi lists it, or null to use the session's model." },
+        "thinking": { "enum": ["off", "minimal", "low", "medium", "high", "xhigh", "max"] },
+        "timeoutMinutes": { "type": "integer", "minimum": 0, "maximum": 1440, "description": "Wall-clock limit for one run; 0 disables it." }
+      }
+    }
+  },
+  "properties": {
+    "$schema": { "type": "string" },
+    "version": { "const": 1 },
+    "directory": { "type": "string", "default": ".charter", "description": "Directory below the project root that holds the charters." },
+    "roles": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "implementer": { "$ref": "#/definitions/role" },
+        "auditor": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "model": { "type": ["string", "null"] },
+            "thinking": { "enum": ["off", "minimal", "low", "medium", "high", "xhigh", "max"] },
+            "timeoutMinutes": { "type": "integer", "minimum": 0, "maximum": 1440 },
+            "shards": { "type": "integer", "minimum": 1, "maximum": 8, "default": 1, "description": "Auditors that verify disjoint criteria in parallel." }
+          }
+        },
+        "refiner": { "$ref": "#/definitions/role" }
+      }
+    },
+    "checks": {
+      "type": "array",
+      "description": "Commands run from the project root after implementation and after refinement.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "run"],
+        "properties": {
+          "name": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9 _.:-]{0,39}$" },
+          "run": { "type": "string", "minLength": 1 },
+          "timeoutSeconds": { "type": "integer", "minimum": 1, "maximum": 21600, "default": 600 }
+        }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "cycles": { "type": "integer", "minimum": 1, "maximum": 50, "default": 3 },
+        "gateRetries": { "type": "integer", "minimum": 0, "maximum": 10, "default": 2 },
+        "reportNudges": { "type": "integer", "minimum": 0, "maximum": 5, "default": 1 }
+      }
+    },
+    "git": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "checkpoints": { "type": "boolean", "default": true }
+      }
+    }
+  }
+}
